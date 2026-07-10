@@ -1,0 +1,11 @@
+/* Self-hosted fonts — Inter (Latin) + Tajawal (Arabic), per EduAI Design
+   System Bible. Design tokens (colors, radii, shadows, spacing, type scale)
+   live in src/theme/system.ts as a Chakra UI theme, not here. */
+@import "@fontsource-variable/inter";
+@import "@fontsource/tajawal/400.css";
+@import "@fontsource/tajawal/500.css";
+@import "@fontsource/tajawal/700.css";
+
+html {
+  scroll-behavior: smooth;
+}
