@@ -128,10 +128,7 @@ function AudienceRow({
           aspectRatio={5 / 3}
           align="center"
           justify="center"
-          borderRadius="2xl"
-          bg={`${audience.color}.subtle`}
-          borderWidth="2px"
-          borderStyle="dashed"
+           
           borderColor={`${audience.color}.muted`}
         >
           <Image

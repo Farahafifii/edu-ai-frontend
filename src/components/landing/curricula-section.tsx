@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import {
@@ -23,30 +24,35 @@ const MotionBox = motion.create(Box);
 // `emblem` is intentionally null for now — drop each curriculum's
 // emblem/flag image in and replace the dashed-circle placeholder inside
 // <CurriculumCard /> with an <Image src={curriculum.emblem} />.
+import nationalImage from "@/assets/national.png";
+import americanImage from "@/assets/american.png";
+import igImage from "@/assets/ig.png";
+import ibImage from "@/assets/ib.png";
+
 const CURRICULA = [
   {
     key: "egyptian",
     color: "success",
     nativeName: "المنهج المصري",
-    emblem: null,
+    emblem: nationalImage,
   },
   {
     key: "american",
     color: "info",
     nativeName: "المنهج الأمريكي",
-    emblem: null,
+    emblem: americanImage,
   },
   {
     key: "british",
     color: "primary",
     nativeName: "المنهج البريطاني",
-    emblem: null,
+    emblem: igImage,
   },
   {
     key: "ib",
     color: "warning",
     nativeName: "دبلومة البكالوريا الدولية",
-    emblem: null,
+    emblem: ibImage,
   },
 ] as const;
 
@@ -97,18 +103,18 @@ function CurriculumCard({ curriculum }: { curriculum: Curriculum }) {
           justify="center"
           borderRadius="full"
           bg="surface"
-          borderWidth="2px"
-          borderStyle="dashed"
-          borderColor={`${curriculum.color}.muted`}
+          
+          // borderColor={`${curriculum.color}.muted`}
           boxShadow="elevation1"
         >
-          <Icon
+          {/* <Icon
             as={ImageIcon}
             boxSize="6"
             color={`${curriculum.color}.solid`}
             opacity="0.5"
             aria-hidden="true"
-          />
+          /> */}
+          <Image  borderRadius="full" boxSize="20" borderColor={`${curriculum.color}.muted`} src={curriculum.emblem} />  
         </Flex>
 
         <Stack gap="0.5">
@@ -185,7 +191,11 @@ export function CurriculaSection() {
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease: "easeOut",
+              }}
             >
               <CurriculumCard curriculum={curriculum} />
             </MotionBox>
@@ -202,7 +212,12 @@ export function CurriculaSection() {
         py={{ base: "10", lg: "12" }}
         px={{ base: "4", md: "6", lg: "8" }}
       >
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} gap="8" maxW="7xl" mx="auto">
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, lg: 4 }}
+          gap="8"
+          maxW="7xl"
+          mx="auto"
+        >
           {STRIP_FEATURES.map((feature) => (
             <Flex key={feature.key} gap="4" align="flex-start">
               <Flex
