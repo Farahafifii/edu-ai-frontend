@@ -21,16 +21,29 @@ import {
 // Colors (p.3) — each brand color becomes a full Chakra "colorPalette" so any
 // component can be themed with e.g. `colorPalette="primary"` and pick up
 // solid/subtle/muted/emphasized/fg/border/focusRing automatically.
-function colorPalette(hex: string, rgb: string) {
+//
+// Every step is mode-aware: `fg` (text on tinted/plain backgrounds) swaps to
+// a lighter shade in dark mode so it keeps contrast against dark surfaces,
+// and the translucent tint steps get slightly higher alphas, since the same
+// alpha reads much weaker over a dark background than over white.
+function colorPalette(hex: string, rgb: string, darkHex: string) {
   return {
     solid: { value: hex },
     contrast: { value: "white" },
-    fg: { value: hex },
-    subtle: { value: `rgba(${rgb}, 0.1)` },
-    muted: { value: `rgba(${rgb}, 0.18)` },
-    emphasized: { value: `rgba(${rgb}, 0.32)` },
-    border: { value: `rgba(${rgb}, 0.4)` },
-    focusRing: { value: hex },
+    fg: { value: { _light: hex, _dark: darkHex } },
+    subtle: {
+      value: { _light: `rgba(${rgb}, 0.1)`, _dark: `rgba(${rgb}, 0.16)` },
+    },
+    muted: {
+      value: { _light: `rgba(${rgb}, 0.18)`, _dark: `rgba(${rgb}, 0.28)` },
+    },
+    emphasized: {
+      value: { _light: `rgba(${rgb}, 0.32)`, _dark: `rgba(${rgb}, 0.42)` },
+    },
+    border: {
+      value: { _light: `rgba(${rgb}, 0.4)`, _dark: `rgba(${rgb}, 0.5)` },
+    },
+    focusRing: { value: { _light: hex, _dark: darkHex } },
   }
 }
 
@@ -74,13 +87,6 @@ const config = defineConfig({
         "2xl": { value: "32px" },
         full: { value: "9999px" },
       },
-      shadows: {
-        // Shadows & Elevation (p.10)
-        elevation1: { value: "0px 2px 8px 0px rgba(0, 0, 0, 0.08)" },
-        elevation2: { value: "0px 4px 16px 0px rgba(0, 0, 0, 0.1)" },
-        elevation3: { value: "0px 8px 24px 0px rgba(0, 0, 0, 0.12)" },
-        elevation4: { value: "0px 16px 48px 0px rgba(0, 0, 0, 0.16)" },
-      },
       fonts: {
         // Typography (p.4) — actual family swaps between Inter/Tajawal via
         // the --eduai-font-sans CSS var, set in globalCss below based on
@@ -91,12 +97,12 @@ const config = defineConfig({
     },
     semanticTokens: {
       colors: {
-        primary: colorPalette("#6C4CFF", "108, 76, 255"),
-        secondary: colorPalette("#2563EB", "37, 99, 235"),
-        success: colorPalette("#22C55E", "34, 197, 94"),
-        warning: colorPalette("#F59E0B", "245, 158, 11"),
-        error: colorPalette("#EF4444", "239, 68, 68"),
-        info: colorPalette("#0EA5E9", "14, 165, 233"),
+        primary: colorPalette("#6C4CFF", "108, 76, 255", "#A78BFF"),
+        secondary: colorPalette("#2563EB", "37, 99, 235", "#60A5FA"),
+        success: colorPalette("#22C55E", "34, 197, 94", "#4ADE80"),
+        warning: colorPalette("#F59E0B", "245, 158, 11", "#FBBF24"),
+        error: colorPalette("#EF4444", "239, 68, 68", "#F87171"),
+        info: colorPalette("#0EA5E9", "14, 165, 233", "#38BDF8"),
         // Explicit named surfaces (p.3, "Background Colors") for precise use
         // alongside Chakra's generic bg.* / border.* (which now resolve
         // against our neutral scale above).
@@ -104,7 +110,38 @@ const config = defineConfig({
         surface: { value: { _light: "#F8FAFC", _dark: "{colors.gray.800}" } },
         surfaceHover: { value: { _light: "#F1F5F9", _dark: "{colors.gray.700}" } },
         divider: { value: { _light: "#E2E8F0", _dark: "{colors.gray.700}" } },
-        card:{value: {_light:"#ebe4fd", _dark: "{colors.gray.800}"}}
+        // Purple-tinted card wash — the dark value leans purple rather than
+        // plain gray so tinted cards keep their brand feel in dark mode.
+        card: { value: { _light: "#ebe4fd", _dark: "#251E4D" } },
+      },
+      shadows: {
+        // Shadows & Elevation (p.10) — semantic (mode-aware): light-mode
+        // shadows are too faint to register on dark surfaces, so dark mode
+        // gets deeper, higher-alpha versions.
+        elevation1: {
+          value: {
+            _light: "0px 2px 8px 0px rgba(0, 0, 0, 0.08)",
+            _dark: "0px 2px 8px 0px rgba(0, 0, 0, 0.4)",
+          },
+        },
+        elevation2: {
+          value: {
+            _light: "0px 4px 16px 0px rgba(0, 0, 0, 0.1)",
+            _dark: "0px 4px 16px 0px rgba(0, 0, 0, 0.45)",
+          },
+        },
+        elevation3: {
+          value: {
+            _light: "0px 8px 24px 0px rgba(0, 0, 0, 0.12)",
+            _dark: "0px 8px 24px 0px rgba(0, 0, 0, 0.5)",
+          },
+        },
+        elevation4: {
+          value: {
+            _light: "0px 16px 48px 0px rgba(0, 0, 0, 0.16)",
+            _dark: "0px 16px 48px 0px rgba(0, 0, 0, 0.55)",
+          },
+        },
       },
     },
     textStyles: defineTextStyles({
