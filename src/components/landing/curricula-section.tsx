@@ -10,14 +10,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import {
-  Globe,
-  ImageIcon,
-  PieChart,
-  ShieldCheck,
-  Sparkle,
-  Zap,
-} from "lucide-react";
+import { Globe, PieChart, ShieldCheck, Sparkle, Zap } from "lucide-react";
 
 const MotionBox = motion.create(Box);
 
@@ -103,7 +96,6 @@ function CurriculumCard({ curriculum }: { curriculum: Curriculum }) {
           justify="center"
           borderRadius="full"
           bg="surface"
-          
           // borderColor={`${curriculum.color}.muted`}
           boxShadow="elevation1"
         >
@@ -114,7 +106,12 @@ function CurriculumCard({ curriculum }: { curriculum: Curriculum }) {
             opacity="0.5"
             aria-hidden="true"
           /> */}
-          <Image  borderRadius="full" boxSize="20" borderColor={`${curriculum.color}.muted`} src={curriculum.emblem} />  
+          <Image
+            borderRadius="full"
+            boxSize="20"
+            borderColor={`${curriculum.color}.muted`}
+            src={curriculum.emblem}
+          />
         </Flex>
 
         <Stack gap="0.5">
